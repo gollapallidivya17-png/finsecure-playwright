@@ -2,7 +2,7 @@
 
 [![Playwright Tests](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml/badge.svg)](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml)
 
-> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login is automated; the other areas are being added one at a time.
+> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login and Accounts Overview are automated; the other areas are being added one at a time.
 
 A test automation framework for the **[ParaBank](https://parabank.parasoft.com/parabank/index.htm)** demo banking application (a free practice site by Parasoft), written in **Playwright + TypeScript**.
 
@@ -20,10 +20,10 @@ finsecure-playwright/
 ├── .github/workflows/
 │   └── playwright.yml           # CI: runs tests on every push
 ├── fixtures/
-│   └── auth.fixture.ts          # login fixture
+│   └── auth.fixture.ts          # loginPage + logged-in dashboardPage fixtures
 ├── pages/
 │   ├── Loginpage.ts             # Login page object
-│   ├── dashbordpage.ts          # Dashboard page object
+│   ├── dashbordpage.ts          # Accounts Overview page object
 │   └── fundtransferpage.ts      # Fund Transfer page object
 ├── test-data/
 │   ├── users.json               # login test data
@@ -32,6 +32,7 @@ finsecure-playwright/
 ├── tests/
 │   ├── api/
 │   │   └── transfers-api.spec.ts
+│   ├── dashboard.spec.ts
 │   ├── login.spec.ts
 │   ├── fund-transfer.spec.ts
 │   └── loan.spec.ts
@@ -44,24 +45,47 @@ finsecure-playwright/
 | Area | Status |
 |---|---|
 | Project structure | ✅ Done |
-| Login page object + tests (5 tests, data-driven) | ✅ Done |
-| Login fixture | ⏭️ Next up |
-| Fund transfer tests (data-driven) | 🔜 Planned |
+| Login page object + tests (data-driven) | ✅ Done |
+| Login fixture (tests start already signed in) | ✅ Done |
+| Accounts Overview page object + tests | ✅ Done |
+| Fund transfer tests (data-driven) | ⏭️ Next up |
 | Loan tests | 🔜 Planned |
 | Transfers API tests | 🔜 Planned |
 | HTML report + GitHub Actions CI (runs on every push) | ✅ Done |
 
-## 🧪 Login Tests
+## 🧪 Tests
+
+**Login** (`tests/login.spec.ts`)
 
 | Test | What it checks |
 |---|---|
 | Valid login | Lands on Accounts Overview and shows "Welcome John Smith" |
-| Log out | Returns to the login form |
 | Wrong password | Shows "could not be verified" error |
 | Unknown username | Shows "could not be verified" error |
 | Empty fields | Shows "Please enter a username and password." |
 
 The invalid-login cases come from `test-data/users.json`, so a new case is just a new row of data.
+
+**Accounts Overview** (`tests/dashboard.spec.ts`), each test starts already logged in via the `dashboardPage` fixture:
+
+| Test | What it checks |
+|---|---|
+| Greeting | Shows "Welcome John Smith" |
+| Accounts list | At least one account, with a valid account number and balance |
+| Log out | Returns to the login form |
+
+## 🔐 Using the Fixtures
+
+Import `test` from the fixture file instead of `@playwright/test`, then ask for the fixture by name:
+
+```ts
+import { test, expect } from '../fixtures/auth.fixture';
+
+test('my test', async ({ dashboardPage }) => {
+  // already logged in and on Accounts Overview
+  await expect(dashboardPage.accountRows.first()).toBeVisible();
+});
+```
 
 ## ▶️ How to Run
 
