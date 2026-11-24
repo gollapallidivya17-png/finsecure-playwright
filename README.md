@@ -88,7 +88,7 @@ The invalid-login cases come from `test-data/users.json`, so a new case is just 
 
 ## 🐞 Bugs Found
 
-Testing ParaBank turned up real defects. Bugs 1 and 2 are kept as tests marked with `test.fail()`, so it shows as **"expected to fail"** in the report and the suite stays green. If ParaBank ever fixes a bug, that test will flag it.
+Testing ParaBank turned up real defects. Bugs 1 and 2 are kept as tests marked with `test.fail()`, so they show as **"expected to fail"** in the report and the suite stays green. If ParaBank ever fixes one of them, its test will flag it.
 
 | # | Bug | Steps | Expected | Actual |
 |---|---|---|---|---|
