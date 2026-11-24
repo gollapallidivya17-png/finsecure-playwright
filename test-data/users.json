@@ -1,0 +1,27 @@
+{
+  "validUser": {
+    "username": "john",
+    "password": "demo",
+    "fullName": "John Smith"
+  },
+  "invalidLogins": [
+    {
+      "case": "wrong password",
+      "username": "john",
+      "password": "wrong-password",
+      "expectedError": "The username and password could not be verified."
+    },
+    {
+      "case": "unknown username",
+      "username": "no_such_user_123",
+      "password": "demo",
+      "expectedError": "The username and password could not be verified."
+    },
+    {
+      "case": "empty username and password",
+      "username": "",
+      "password": "",
+      "expectedError": "Please enter a username and password."
+    }
+  ]
+}
