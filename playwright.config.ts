@@ -4,6 +4,9 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
+  // ParaBank's host rate-limits busy visitors (Cloudflare error 1015),
+  // so CI runs one test at a time to stay under the limit
+  workers: process.env.CI ? 1 : undefined,
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
     // ParaBank: free public demo bank by Parasoft, made for test practice
