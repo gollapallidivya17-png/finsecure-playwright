@@ -1,5 +1,7 @@
 # FinSecure – Playwright Automation Framework 🏦
 
+[![Playwright Tests](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml/badge.svg)](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml)
+
 > 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login is automated; the other areas are being added one at a time.
 
 A test automation framework for the **[ParaBank](https://parabank.parasoft.com/parabank/index.htm)** demo banking application (a free practice site by Parasoft), written in **Playwright + TypeScript**.
@@ -15,6 +17,8 @@ A test automation framework for the **[ParaBank](https://parabank.parasoft.com/p
 
 ```
 finsecure-playwright/
+├── .github/workflows/
+│   └── playwright.yml           # CI: runs tests on every push
 ├── fixtures/
 │   └── auth.fixture.ts          # login fixture
 ├── pages/
@@ -45,7 +49,7 @@ finsecure-playwright/
 | Fund transfer tests (data-driven) | 🔜 Planned |
 | Loan tests | 🔜 Planned |
 | Transfers API tests | 🔜 Planned |
-| HTML report + GitHub Actions CI | 🔜 Planned |
+| HTML report + GitHub Actions CI (runs on every push) | ✅ Done |
 
 ## 🧪 Login Tests
 
