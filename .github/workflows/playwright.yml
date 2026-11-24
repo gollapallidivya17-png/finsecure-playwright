@@ -27,6 +27,15 @@ jobs:
       - name: Run tests
         run: npx playwright test
 
+      - name: Show why tests failed
+        if: failure()
+        run: |
+          for f in $(find test-results -name error-context.md); do
+            echo "::group::$f"
+            sed -n '/# Error details/,$p' "$f" | head -120
+            echo "::endgroup::"
+          done
+
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
