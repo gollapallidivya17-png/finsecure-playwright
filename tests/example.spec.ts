@@ -1,9 +1,12 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/Loginpage';
 
-test('Valid Login', async ({ page }) => {
+// Quick smoke test: the app is up and the demo user can log in
+test('Valid Login (smoke)', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
-  await loginPage.navigate();
-  await loginPage.login('admin', 'password');
+  await loginPage.goto();
+  await loginPage.login('john', 'demo');
+
+  await expect(page.getByRole('heading', { name: 'Accounts Overview' })).toBeVisible();
 });
