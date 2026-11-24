@@ -1,8 +1,8 @@
 # FinSecure – Playwright Automation Framework 🏦
 
-> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. The folder structure is set up; tests and page objects are being added one at a time.
+> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login is automated; the other areas are being added one at a time.
 
-A test automation framework for a sample banking application, written in **Playwright + TypeScript**.
+A test automation framework for the **[ParaBank](https://parabank.parasoft.com/parabank/index.htm)** demo banking application (a free practice site by Parasoft), written in **Playwright + TypeScript**.
 
 ## 🎯 Goals
 
@@ -24,6 +24,7 @@ finsecure-playwright/
 ├── test-data/
 │   ├── users.json               # login test data
 │   └── transfers.csv            # fund transfer test data
+├── playwright.config.ts         # base URL, reporter, browser
 ├── tests/
 │   ├── api/
 │   │   └── transfers-api.spec.ts
@@ -39,21 +40,36 @@ finsecure-playwright/
 | Area | Status |
 |---|---|
 | Project structure | ✅ Done |
-| Login page object + tests | ⏭️ Next up |
-| Login fixture | 🔜 Planned |
+| Login page object + tests (5 tests, data-driven) | ✅ Done |
+| Login fixture | ⏭️ Next up |
 | Fund transfer tests (data-driven) | 🔜 Planned |
 | Loan tests | 🔜 Planned |
 | Transfers API tests | 🔜 Planned |
 | HTML report + GitHub Actions CI | 🔜 Planned |
 
+## 🧪 Login Tests
+
+| Test | What it checks |
+|---|---|
+| Valid login | Lands on Accounts Overview and shows "Welcome John Smith" |
+| Log out | Returns to the login form |
+| Wrong password | Shows "could not be verified" error |
+| Unknown username | Shows "could not be verified" error |
+| Empty fields | Shows "Please enter a username and password." |
+
+The invalid-login cases come from `test-data/users.json`, so a new case is just a new row of data.
+
 ## ▶️ How to Run
 
 ```bash
-npm install -D @playwright/test
-npx playwright install
-npx playwright test
-npx playwright show-report
+npm install
+npx playwright install chromium
+npm test                # run all tests
+npm run test:headed     # watch the browser
+npm run report          # open the HTML report
 ```
+
+> ParaBank is a shared public demo, so it can occasionally be slow or reset its data.
 
 ## 🛠️ Tech
 
