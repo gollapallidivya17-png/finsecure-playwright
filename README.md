@@ -2,7 +2,7 @@
 
 [![Playwright Tests](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml/badge.svg)](https://github.com/gollapallidivya17-png/finsecure-playwright/actions/workflows/playwright.yml)
 
-> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login and Accounts Overview are automated; the other areas are being added one at a time.
+> 🚧 **Work in progress.** I'm building this framework step by step while learning Playwright. Login, Accounts Overview and Fund Transfer are automated; the other areas are being added one at a time.
 
 A test automation framework for the **[ParaBank](https://parabank.parasoft.com/parabank/index.htm)** demo banking application (a free practice site by Parasoft), written in **Playwright + TypeScript**.
 
@@ -20,14 +20,14 @@ finsecure-playwright/
 ├── .github/workflows/
 │   └── playwright.yml           # CI: runs tests on every push
 ├── fixtures/
-│   └── auth.fixture.ts          # loginPage + logged-in dashboardPage fixtures
+│   └── auth.fixture.ts          # loginPage, dashboardPage, transferPage fixtures
 ├── pages/
 │   ├── Loginpage.ts             # Login page object
 │   ├── dashbordpage.ts          # Accounts Overview page object
 │   └── fundtransferpage.ts      # Fund Transfer page object
 ├── test-data/
 │   ├── users.json               # login test data
-│   └── transfers.csv            # fund transfer test data
+│   └── transfers.csv            # fund transfer test cases
 ├── playwright.config.ts         # base URL, reporter, browser
 ├── tests/
 │   ├── api/
@@ -37,7 +37,7 @@ finsecure-playwright/
 │   ├── fund-transfer.spec.ts
 │   └── loan.spec.ts
 └── utils/
-    └── helpers.ts
+    └── helpers.ts               # readCsv() for CSV test data
 ```
 
 ## ✅ Progress
@@ -48,8 +48,8 @@ finsecure-playwright/
 | Login page object + tests (data-driven) | ✅ Done |
 | Login fixture (tests start already signed in) | ✅ Done |
 | Accounts Overview page object + tests | ✅ Done |
-| Fund transfer tests (data-driven) | ⏭️ Next up |
-| Loan tests | 🔜 Planned |
+| Fund transfer page object + tests (data-driven from CSV) | ✅ Done |
+| Loan tests | ⏭️ Next up |
 | Transfers API tests | 🔜 Planned |
 | HTML report + GitHub Actions CI (runs on every push) | ✅ Done |
 
@@ -73,6 +73,28 @@ The invalid-login cases come from `test-data/users.json`, so a new case is just 
 | Greeting | Shows "Welcome John Smith" |
 | Accounts list | At least one account, with a valid account number and balance |
 | Log out | Returns to the login form |
+
+**Fund Transfer** (`tests/fund-transfer.spec.ts`), driven by `test-data/transfers.csv` and starting on the Transfer Funds page via the `transferPage` fixture:
+
+| Test | Amount | Expected |
+|---|---|---|
+| Whole dollar amount | 100 | "Transfer Complete!" with $100.00 and the right accounts |
+| Decimal amount | 25.50 | "Transfer Complete!" with $25.50 |
+| Small amount | 1 | "Transfer Complete!" with $1.00 |
+| Empty amount | *(blank)* | Transfer is rejected |
+| Text instead of a number | abc | Transfer is rejected |
+| Negative amount | -5 | Transfer is rejected 🐞 *known bug* |
+| Zero amount | 0 | Transfer is rejected 🐞 *known bug* |
+
+## 🐞 Bugs Found
+
+Testing ParaBank turned up real defects. Bugs 1 and 2 are kept as tests marked with `test.fail()`, so it shows as **"expected to fail"** in the report and the suite stays green. If ParaBank ever fixes a bug, that test will flag it.
+
+| # | Bug | Steps | Expected | Actual |
+|---|---|---|---|---|
+| 1 | Negative transfer accepted | Transfer Funds → amount `-5` → Transfer | Rejected with a validation error | "Transfer Complete! -$5.00 has been transferred" |
+| 2 | Zero transfer accepted | Transfer Funds → amount `0` → Transfer | Rejected with a validation error | "Transfer Complete! $0.00 has been transferred" |
+| 3 | No friendly message for empty or text amount | Transfer Funds → leave amount blank (or type `abc`) → Transfer | "The amount cannot be empty." / "Please enter a valid amount." | "An internal error has occurred and has been logged." |
 
 ## 🔐 Using the Fixtures
 
