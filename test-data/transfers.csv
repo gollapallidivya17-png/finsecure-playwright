@@ -1,0 +1,8 @@
+case,amount,expected,knownBug
+whole dollar amount,100,success,
+decimal amount,25.50,success,
+small amount,1,success,
+empty amount,,rejected,
+text instead of a number,abc,rejected,
+negative amount,-5,rejected,ParaBank bug: a negative transfer is accepted
+zero amount,0,rejected,ParaBank bug: a zero transfer is accepted
