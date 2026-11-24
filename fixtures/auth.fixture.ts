@@ -1,6 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { LoginPage } from '../pages/Loginpage';
 import { DashboardPage } from '../pages/dashbordpage';
+import { FundTransferPage } from '../pages/fundtransferpage';
 import users from '../test-data/users.json';
 
 type Fixtures = {
@@ -8,6 +9,8 @@ type Fixtures = {
   loginPage: LoginPage;
   /** Accounts Overview page, already logged in as the valid test user */
   dashboardPage: DashboardPage;
+  /** Transfer Funds page, already logged in and opened */
+  transferPage: FundTransferPage;
 };
 
 /**
@@ -29,6 +32,13 @@ export const test = base.extend<Fixtures>({
     const dashboardPage = new DashboardPage(page);
     await expect(dashboardPage.heading).toBeVisible();
     await use(dashboardPage);
+  },
+
+  // Builds on dashboardPage, so the user is already logged in
+  transferPage: async ({ page, dashboardPage }, use) => {
+    const transferPage = new FundTransferPage(page);
+    await transferPage.goto();
+    await use(transferPage);
   },
 });
 
