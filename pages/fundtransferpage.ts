@@ -49,9 +49,13 @@ export class FundTransferPage {
    * Returns the account numbers that were picked, so tests can check the confirmation.
    */
   async transfer(amount: string, fromIndex = 0, toIndex = 1) {
+    // ParaBank is a shared demo and its data gets reset, so the user may
+    // have only one account. Never ask for an account that isn't there.
+    const lastIndex = (await this.fromAccount.locator('option').count()) - 1;
+
     await this.amountInput.fill(amount);
-    await this.fromAccount.selectOption({ index: fromIndex });
-    await this.toAccount.selectOption({ index: toIndex });
+    await this.fromAccount.selectOption({ index: Math.min(fromIndex, lastIndex) });
+    await this.toAccount.selectOption({ index: Math.min(toIndex, lastIndex) });
 
     const from = await this.fromAccount.inputValue();
     const to = await this.toAccount.inputValue();
